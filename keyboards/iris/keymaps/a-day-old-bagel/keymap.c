@@ -2,13 +2,16 @@
 
 extern keymap_config_t keymap_config;
 
-#define _GUI(k) LGUI(KC_##k)
+#ifdef GUI
+# error Conflicting definition of GUI
+#endif
+#define GUI(k) LGUI(KC_##k)
 
-#define _MALTRAK 0
-#define _QWERTY 1
-#define _LOWER 2
-#define _RAISE 3
-#define _ADJUST 16
+#define N_MALTRAK 0
+#define N_QWERTY 1
+#define N_LOWER 2
+#define N_RAISE 3
+#define N_ADJUST 16
 
 enum custom_keycodes {
   MALTRAK = SAFE_RANGE,
@@ -20,7 +23,7 @@ enum custom_keycodes {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-  [_MALTRAK] = LAYOUT(
+  [N_MALTRAK] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
      KC_TILD, KC_AMPR, KC_EXLM, KC_LPRN, KC_LBRC, KC_LCBR,                            KC_RCBR, KC_RBRC, KC_RPRN, KC_ASTR, KC_CIRC, KC_BSLS,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -34,7 +37,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
   ),
 
-  [_QWERTY] = LAYOUT(
+  [N_QWERTY] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
      KC_LBRC, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                               KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_RBRC,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -48,9 +51,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
   ),
 
-  [_LOWER] = LAYOUT(
+  [N_LOWER] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     _______, _______, _______, _______, _______, _______,                            KC_NLCK, KC_P7,   KC_P8,   KC_P9,   KC_PSLS, _______,
+     _______, GUI(1),  GUI(2),  GUI(3),  GUI(4),  GUI(5),                             KC_NLCK, KC_P7,   KC_P8,   KC_P9,   KC_PSLS, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_INS,  KC_PGUP, KC_HOME, KC_UP,   KC_END,  KC_LCBR,                            KC_RCBR, KC_P4,   KC_P5,   KC_P6,   KC_PAST, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -62,21 +65,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
   ),
 
-  [_RAISE] = LAYOUT(
+  [N_RAISE] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
-     _______, _GUI(1), _GUI(2), _GUI(3), _GUI(4), _GUI(5),                            _GUI(6), _GUI(7), _GUI(8), _GUI(9), _GUI(0), _______,
+     KC_LALT, _______, _______, _______, _______, _______,                            GUI(6),  GUI(7),  GUI(8),  GUI(9),  GUI(0),  KC_RALT,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_GRV,  KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                            KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_SLSH,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
      KC_9,    KC_7,    KC_5,    KC_3,    KC_1,    KC_EQL,                             KC_MINS, KC_0,    KC_2,    KC_4,    KC_6,    KC_8,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐        ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     KC_F9,   KC_F7,   KC_F5,   KC_F3,   KC_F1,   KC_F11,  KC_LALT,          KC_RALT, KC_F12,  KC_F10,  KC_F2,   KC_F4,   KC_F6,   KC_F8,
+     KC_F9,   KC_F7,   KC_F5,   KC_F3,   KC_F1,   KC_F11,  _______,          _______, KC_F12,  KC_F10,  KC_F2,   KC_F4,   KC_F6,   KC_F8,
   //└────────┴────────┴────────┴───┬────┴───┬────┴───┬────┴───┬────┘        └───┬────┴───┬────┴───┬────┴───┬────┴────────┴────────┴────────┘
                                     _______, _______, _______,                   KC_DEL,  _______, _______
                                 // └────────┴────────┴────────┘                 └────────┴────────┴────────┘
   ),
 
-  [_ADJUST] = LAYOUT(
+  [N_ADJUST] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                          ┌────────┬────────┬────────┬────────┬────────┬────────┐
      RESET,   _______, _______, _______, _______, _______,                            _______, QWERTY,  MALTRAK, _______, _______, _______,
   //├────────┼────────┼────────┼────────┼────────┼────────┤                          ├────────┼────────┼────────┼────────┼────────┼────────┤
@@ -95,37 +98,37 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case MALTRAK:
       if (record->event.pressed) {
-        set_single_persistent_default_layer(_MALTRAK);
+        set_single_persistent_default_layer(N_MALTRAK);
       }
       return false;
     case QWERTY:
       if (record->event.pressed) {
-        set_single_persistent_default_layer(_QWERTY);
+        set_single_persistent_default_layer(N_QWERTY);
       }
       return false;
     case LOWER:
       if (record->event.pressed) {
-        layer_on(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        layer_on(N_LOWER);
+        update_tri_layer(N_LOWER, N_RAISE, N_ADJUST);
       } else {
-        layer_off(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        layer_off(N_LOWER);
+        update_tri_layer(N_LOWER, N_RAISE, N_ADJUST);
       }
       return false;
     case RAISE:
       if (record->event.pressed) {
-        layer_on(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        layer_on(N_RAISE);
+        update_tri_layer(N_LOWER, N_RAISE, N_ADJUST);
       } else {
-        layer_off(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        layer_off(N_RAISE);
+        update_tri_layer(N_LOWER, N_RAISE, N_ADJUST);
       }
       return false;
     case ADJUST:
       if (record->event.pressed) {
-        layer_on(_ADJUST);
+        layer_on(N_ADJUST);
       } else {
-        layer_off(_ADJUST);
+        layer_off(N_ADJUST);
       }
       return false;
   }
